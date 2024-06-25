@@ -12,16 +12,12 @@ const Manager = () => {
   const [form, setForm] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setPasswordArray] = useState([]);
   const [editingId, setEditingId] = useState(null);
-  const { loginWithRedirect, logout, isAuthenticated, getAccessTokenSilently } =
-    useAuth0();
+  // const { loginWithRedirect, logout, isAuthenticated, getAccessTokenSilently } =
+  //   useAuth0();
 
   const getPasswords = async () => {
-    const token = await getAccessTokenSilently(); // Add this line
-    let req = await axios.get("http://localhost:5001/api/data", {
-      headers: {
-        Authorization: `Bearer ${token}`, // Add this line
-      },
-    });
+    // const token = await getAccessTokenSilently(); // Add this line
+    let req = await axios.get("http://localhost:5001/api/data");
     let passwords = await req.data;
     // console.log(passwords);
     setPasswordArray(passwords);
@@ -85,12 +81,8 @@ const Manager = () => {
       return;
     } else if (editingId) {
       // Update existing password
-      const token = await getAccessTokenSilently();
-      await axios.put(`http://localhost:5001/api/data/${editingId}`, form, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add the token to headers
-        },
-      });
+      // const token = await getAccessTokenSilently();
+      await axios.put(`http://localhost:5001/api/data/${editingId}`, form);
       const updatedArray = passwordArray.map((item) =>
         item._id === editingId ? { ...item, ...form } : item
       );
@@ -100,18 +92,10 @@ const Manager = () => {
       setForm({ site: "", username: "", password: "" });
     } else {
       try {
-        const token = await getAccessTokenSilently();
-        await axios.post(
-          "http://localhost:5001/api/data",
-          {
-            ...form,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        // const token = await getAccessTokenSilently();
+        await axios.post("http://localhost:5001/api/data", {
+          ...form,
+        });
       } catch (err) {
         console.log(err);
       }
@@ -139,12 +123,8 @@ const Manager = () => {
   const deletePassword = async (id) => {
     try {
       console.log("Frontend id : ", id);
-      const token = await getAccessTokenSilently();
-      await axios.delete(`http://localhost:5001/api/data/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // const token = await getAccessTokenSilently();
+      await axios.delete(`http://localhost:5001/api/data/${id}`);
       const updatedDeleteArray = passwordArray.filter((element) => {
         return element._id !== id;
       });
