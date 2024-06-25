@@ -5,6 +5,7 @@ import { config } from "dotenv";
 import dbConnect from "./config/dbConnect.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import apiData from "./routes/dataRoute.js";
+import cookieParser from "cookie-parser";
 import path from "path";
 
 config();
@@ -14,6 +15,7 @@ const port = process.env.PORT || 5001;
 const _dirname = path.resolve();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 app.use(errorHandler);
 app.use("/api", apiData);
