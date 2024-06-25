@@ -7,16 +7,6 @@ const readData = asyncHandler(async (req, res) => {
   res.status(200).json(dataset);
 });
 
-// const createData = asyncHandler(async (req, res) => {
-//   //   console.log(`The request body : `, req.body);
-//   const { username, site, password } = req.body;
-//   if (!username || !site || !password) {
-//     res.status(401);
-//     throw new Error("All fields are mandatory!");
-//   }
-//   const dataset = await Data.create({ username, site, password });
-//   res.status(201).json(dataset);
-// });
 const createData = async (req, res) => {
   const { username, site, password } = req.body;
 
@@ -48,24 +38,6 @@ const updateData = asyncHandler(async (req, res) => {
   res.status(200).json(updatedData);
 });
 
-// const deleteData = asyncHandler(async (req, res) => {
-//   // const data = await Data.findOneAndDelete({ uuid: id });
-//   console.log("Backend id : ", req.params.id);
-//   const data = await Data.findById(req.params.id);
-//   try {
-//     if (!data) {
-//       res.status(404);
-//       throw new Error("No such data!");
-//     } else {
-//       console.log(req.params);
-//     }
-//     await Data.findByIdAndDelete(req.params.id);
-//     res.status(200).json(data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-/////////////////////////////////////////////////////
 const deleteAll = asyncHandler(async (req, res) => {
   try {
     await Data.deleteMany({});

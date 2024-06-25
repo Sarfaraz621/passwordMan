@@ -1,3 +1,6 @@
+import AuthLogin from "./AuthLogin";
+import AuthLogout from "./AuthLogout";
+
 const Navbar = () => {
   return (
     <nav className="bg-slate-800 text-white">
@@ -13,6 +16,8 @@ const Navbar = () => {
           <span className="m-1">Github</span>
         </button>
       </div>
+      {/* <AuthLogin />
+      <AuthLogout /> */}
     </nav>
   );
 };

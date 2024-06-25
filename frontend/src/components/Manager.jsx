@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth0 } from "@auth0/auth0-react";
 import { v4 as uuidv4 } from "uuid";
 uuidv4();
 
@@ -11,9 +12,16 @@ const Manager = () => {
   const [form, setForm] = useState({ site: "", username: "", password: "" });
   const [passwordArray, setPasswordArray] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const { loginWithRedirect, logout, isAuthenticated, getAccessTokenSilently } =
+    useAuth0();
 
   const getPasswords = async () => {
-    let req = await axios.get("http://localhost:5001/api/data");
+    const token = await getAccessTokenSilently(); // Add this line
+    let req = await axios.get("http://localhost:5001/api/data", {
+      headers: {
+        Authorization: `Bearer ${token}`, // Add this line
+      },
+    });
     let passwords = await req.data;
     // console.log(passwords);
     setPasswordArray(passwords);
@@ -77,7 +85,12 @@ const Manager = () => {
       return;
     } else if (editingId) {
       // Update existing password
-      await axios.put(`http://localhost:5001/api/data/${editingId}`, form);
+      const token = await getAccessTokenSilently();
+      await axios.put(`http://localhost:5001/api/data/${editingId}`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to headers
+        },
+      });
       const updatedArray = passwordArray.map((item) =>
         item._id === editingId ? { ...item, ...form } : item
       );
@@ -86,20 +99,29 @@ const Manager = () => {
 
       setForm({ site: "", username: "", password: "" });
     } else {
-      // const newId = uuidv4();
-      await axios.post("http://localhost:5001/api/data", {
-        ...form,
-        // id: newId,
-      });
+      try {
+        const token = await getAccessTokenSilently();
+        await axios.post(
+          "http://localhost:5001/api/data",
+          {
+            ...form,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (err) {
+        console.log(err);
+      }
       const updatedArray = [
         ...passwordArray,
         {
           ...form,
-          // id: newId
         },
       ];
       setPasswordArray(updatedArray);
-      //localStorage.setItem("passwords", JSON.stringify(updatedArray));
       console.log(updatedArray);
       setForm({ site: "", username: "", password: "" });
       // toast("Data Saved!", {
@@ -117,12 +139,16 @@ const Manager = () => {
   const deletePassword = async (id) => {
     try {
       console.log("Frontend id : ", id);
-      await axios.delete(`http://localhost:5001/api/data/${id}`);
+      const token = await getAccessTokenSilently();
+      await axios.delete(`http://localhost:5001/api/data/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const updatedDeleteArray = passwordArray.filter((element) => {
         return element._id !== id;
       });
       setPasswordArray(updatedDeleteArray);
-      // localStorage.setItem("passwords", JSON.stringify(updatedDeleteArray));
 
       console.log(passwordArray);
       // toast(`Password Deleted.`, {
@@ -140,15 +166,6 @@ const Manager = () => {
     }
   };
   const editPassword = async (id) => {
-    // console.log("Frontend edit id : ", id);
-    // await axios.put(`http://localhost:5001/api/data/${id}`);
-    // const selectedArray = passwordArray.filter((item) => item._id === id)[0];
-    // setForm(selectedArray);
-    // const updatedEditArray = passwordArray.filter(
-    //   (element) => element._id !== id
-    // );
-    // setPasswordArray(updatedEditArray);
-    // console.log(passwordArray);
     // toast(`Selected data is in input fields now.`, {
     //   position: "top-right",
     //   autoClose: 5000,
@@ -164,13 +181,6 @@ const Manager = () => {
     const selectedPassword = passwordArray.find((item) => item._id === id);
     setForm(selectedPassword);
     setEditingId(id);
-
-    // await axios.put(`http://localhost:5001/api/data/${id}`, selectedPassword);
-    // const updatedArray = passwordArray.map((item) =>
-    //   item._id === id ? { ...item, ...form } : item
-    // );
-    // setPasswordArray(updatedArray);
-    // setEditingId(null);
   };
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -204,9 +214,6 @@ const Manager = () => {
         transition="Bounce"
       />
       <ToastContainer />
-      {/* <div className="absolute inset-0 -z-10 min-h-screen w-full bg-green-50 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]">
-        <div className="absolute top-0 z-[-2] min-h-screen w-screen bg-green-50 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
-      </div> */}
       <div
         className="fixed inset-0 -z-10 min-h-screen w-full bg-green-50 
   bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),
