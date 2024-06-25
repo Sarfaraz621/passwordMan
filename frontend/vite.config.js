@@ -13,12 +13,4 @@ export default defineConfig({
       },
     },
   },
-  define: {
-    "import.meta.env.REACT_APP_AUTH0_DOMAIN": JSON.stringify(
-      "dev-m6gpc6c3duro7fwe.uk.auth0.com"
-    ),
-    "import.meta.env.REACT_APP_AUTH0_CLIENT_ID": JSON.stringify(
-      "iNlWtish7j7fALX1SXQPg3efTLXydlIk"
-    ),
-  },
 });
