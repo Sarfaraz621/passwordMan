@@ -5,7 +5,10 @@ import { config } from "dotenv";
 config();
 const dbConnect = async () => {
   try {
-    const connect = await mongoose.connect(process.env.connection_string);
+    const connect = await mongoose.connect(process.env.connection_string, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log(
       "Database Connected : ",
       connect.connection.host,
