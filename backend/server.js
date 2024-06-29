@@ -19,7 +19,9 @@ app.use(cookieParser());
 app.use(cors());
 app.use(errorHandler);
 app.use("/api", apiData);
-app.use("/hello", res.json({ message: "Hello World!!" }));
+app.use("/hello", (req, res) => {
+  res.json({ message: "Hello World!!" });
+});
 // app.use(express.static(path.join(_dirname, "../frontend/dist")));
 
 // app.get("*", (req, res) => {
