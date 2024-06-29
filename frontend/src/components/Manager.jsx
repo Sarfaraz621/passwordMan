@@ -18,7 +18,10 @@ const Manager = () => {
   const getPasswords = async () => {
     // const token = await getAccessTokenSilently(); // Add this line
     let req = await axios.get(`${process.env.REACT_BACKEND_LINK}/api/data`);
-    let passwords = await req.data;
+    let passwords = await axios
+      .get(`${process.env.REACT_BACKEND_LINK}/api/data`)
+      .then((response) => console.log("done"))
+      .catch((error) => console.log(error));
     // console.log(passwords);
     setPasswordArray(passwords);
     console.log(passwords);
