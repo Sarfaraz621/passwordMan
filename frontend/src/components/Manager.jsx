@@ -83,7 +83,7 @@ const Manager = () => {
       // Update existing password
       // const token = await getAccessTokenSilently();
       await axios.put(
-        `${process.env.REACT_BACKEND_LINK}/api/data/${editingId}`,
+        `https://passwordman.onrender.com/api/data/${editingId}`,
         form
       );
       const updatedArray = passwordArray.map((item) =>
@@ -96,7 +96,7 @@ const Manager = () => {
     } else {
       try {
         // const token = await getAccessTokenSilently();
-        await axios.post(`${process.env.REACT_BACKEND_LINK}/api/data`, {
+        await axios.post(`https://passwordman.onrender.com/api/data`, {
           ...form,
         });
       } catch (err) {
@@ -127,7 +127,7 @@ const Manager = () => {
     try {
       console.log("Frontend id : ", id);
       // const token = await getAccessTokenSilently();
-      await axios.delete(`${process.env.REACT_BACKEND_LINK}/api/data/${id}`);
+      await axios.delete(`https://passwordman.onrender.com/api/data/${id}`);
       const updatedDeleteArray = passwordArray.filter((element) => {
         return element._id !== id;
       });
