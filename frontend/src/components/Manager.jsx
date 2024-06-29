@@ -17,7 +17,7 @@ const Manager = () => {
 
   const getPasswords = async () => {
     // const token = await getAccessTokenSilently(); // Add this line
-    let req = await axios.get("http://localhost:5001/api/data");
+    let req = await axios.get(`${process.env.REACT_BACKEND_LINK}/api/data`);
     let passwords = await req.data;
     // console.log(passwords);
     setPasswordArray(passwords);
@@ -82,7 +82,10 @@ const Manager = () => {
     } else if (editingId) {
       // Update existing password
       // const token = await getAccessTokenSilently();
-      await axios.put(`http://localhost:5001/api/data/${editingId}`, form);
+      await axios.put(
+        `${process.env.REACT_BACKEND_LINK}/api/data/${editingId}`,
+        form
+      );
       const updatedArray = passwordArray.map((item) =>
         item._id === editingId ? { ...item, ...form } : item
       );
@@ -93,7 +96,7 @@ const Manager = () => {
     } else {
       try {
         // const token = await getAccessTokenSilently();
-        await axios.post("http://localhost:5001/api/data", {
+        await axios.post(`${process.env.REACT_BACKEND_LINK}/api/data`, {
           ...form,
         });
       } catch (err) {
@@ -124,7 +127,7 @@ const Manager = () => {
     try {
       console.log("Frontend id : ", id);
       // const token = await getAccessTokenSilently();
-      await axios.delete(`http://localhost:5001/api/data/${id}`);
+      await axios.delete(`${process.env.REACT_BACKEND_LINK}/api/data/${id}`);
       const updatedDeleteArray = passwordArray.filter((element) => {
         return element._id !== id;
       });
