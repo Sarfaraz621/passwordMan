@@ -19,12 +19,12 @@ app.use(cookieParser());
 app.use(cors());
 app.use(errorHandler);
 app.use("/api", apiData);
+app.use("/hello", res.json({ message: "Hello World!!" }));
+// app.use(express.static(path.join(_dirname, "../frontend/dist")));
 
-app.use(express.static(path.join(_dirname, "../frontend/dist")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(_dirname, "../frontend/dist/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(_dirname, "../frontend/dist/index.html"));
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);

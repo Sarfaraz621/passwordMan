@@ -17,7 +17,7 @@ const Manager = () => {
 
   const getPasswords = async () => {
     // const token = await getAccessTokenSilently(); // Add this line
-    let req = await axios.get(`https://datavault.onrender.com/api/data`);
+    let req = await axios.get(`https://passwordman.onrender.com/api/data`);
     let passwords = await req.data;
     // console.log(passwords);
     setPasswordArray(passwords);
